@@ -4,6 +4,15 @@ This repository demonstrates how to use GitHub Actions to automate the process o
 
 Watch the tutorial video for this lab at [Github action Lab2](https://youtu.be/cj5sXIMZUjQ)
 
+## My Changes
+
+- Trained on the real **Breast Cancer** dataset instead of random synthetic data.
+- Split the data 80/20 and evaluated the model on the held-out test set.
+- Logged more metrics: Accuracy, F1, Precision and Recall.
+- Fixed the daily workflow so it creates folders and commits files correctly.
+
+Results are saved by GitHub Actions in `models/` and `metrics/`.
+
 
 ## Prerequisites
 
