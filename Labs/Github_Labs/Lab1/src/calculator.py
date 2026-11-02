@@ -53,9 +53,45 @@ def fun4(x,y,z):
         z (int/float): Third number.
     Returns:
         int/float: Sum of x, y and z.
+        Raises:
+        ValueError: If x, y or z is not a number.
     """
+    if not all(isinstance(v, (int, float)) for v in (x, y, z)):
+        raise ValueError("All inputs must be numbers.")
     total_sum = x + y + z
     return total_sum
+
+def fun5(x, y):
+    """
+    Divides x by y.
+    Args:
+        x (int/float): Numerator.
+        y (int/float): Denominator.
+    Returns:
+        float: Quotient of x and y.
+        Raises:
+        ValueError: If x or y is not a number, or y is zero.
+    """
+    if not (isinstance(x, (int, float)) and isinstance(y, (int, float))):
+        raise ValueError("Both inputs must be numbers.")
+    if y == 0:
+        raise ValueError("Cannot divide by zero.")
+    return x / y
+
+def fun6(x, y):
+    """
+    Raises x to the power of y.
+    Args:
+        x (int/float): Base.
+        y (int/float): Exponent.
+    Returns:
+        int/float: x raised to the power y.
+        Raises:
+        ValueError: If x or y is not a number.
+    """
+    if not (isinstance(x, (int, float)) and isinstance(y, (int, float))):
+        raise ValueError("Both inputs must be numbers.")
+    return x ** y
 
 
 # f1_op = fun1(2,3)

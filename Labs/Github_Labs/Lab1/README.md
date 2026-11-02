@@ -2,6 +2,14 @@
 
 This lab focuses on 5 modules, which includes creating a virtual environment, creating a GitHub repository, creating Python files, creating test files using pytest and unittest, and implementing GitHub Actions.
 
+## My Changes
+
+- Added two new functions to `calculator.py`: `fun5` (divide, blocks divide-by-zero) and `fun6` (power).
+- Added input checking to `fun4`.
+- Added tests for the new functions, plus error-case tests, in both pytest and unittest.
+- Used `@pytest.mark.parametrize` to test `fun1` with several inputs.
+- Added a `.gitignore` so the `lab_01` virtual environment is not tracked.
+
 
 
 

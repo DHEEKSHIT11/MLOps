@@ -27,4 +27,36 @@ def test_fun4():
     assert calculator.fun4 (-1, -1, -1) == -3
     
     assert calculator.fun4 (-1, -1, 100) == 98
-    
+
+
+def test_fun5():
+    assert calculator.fun5(6, 3) == 2
+    assert calculator.fun5(5, 2) == 2.5
+    assert calculator.fun5(-4, 2) == -2
+
+
+def test_fun6():
+    assert calculator.fun6(2, 3) == 8
+    assert calculator.fun6(5, 0) == 1
+    assert calculator.fun6(4, 0.5) == 2
+
+
+@pytest.mark.parametrize("x, y, expected", [
+    (1, 2, 3),
+    (0, 0, 0),
+    (2.5, 2.5, 5.0),
+])
+def test_fun1_parametrized(x, y, expected):
+    assert calculator.fun1(x, y) == expected
+
+
+def test_divide_by_zero():
+    with pytest.raises(ValueError):
+        calculator.fun5(1, 0)
+
+
+def test_invalid_input():
+    with pytest.raises(ValueError):
+        calculator.fun1("a", 1)
+    with pytest.raises(ValueError):
+        calculator.fun4(1, 2, "c")

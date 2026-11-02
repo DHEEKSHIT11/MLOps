@@ -36,6 +36,26 @@ class TestCalculator(unittest.TestCase):
         self.assertEqual(calculator.fun4(-1, -1, -1), -3)
         self.assertEqual(calculator.fun4(-1, -1, 100), 98)
 
+    def test_fun5(self):
+        self.assertEqual(calculator.fun5(6, 3), 2)
+        self.assertEqual(calculator.fun5(5, 2), 2.5)
+        self.assertEqual(calculator.fun5(-4, 2), -2)
+
+    def test_fun6(self):
+        self.assertEqual(calculator.fun6(2, 3), 8)
+        self.assertEqual(calculator.fun6(5, 0), 1)
+        self.assertEqual(calculator.fun6(4, 0.5), 2)
+
+    def test_divide_by_zero(self):
+        with self.assertRaises(ValueError):
+            calculator.fun5(1, 0)
+
+    def test_invalid_input(self):
+        with self.assertRaises(ValueError):
+            calculator.fun1("a", 1)
+        with self.assertRaises(ValueError):
+            calculator.fun4(1, 2, "c")
+
 
 
 if __name__ == '__main__':
