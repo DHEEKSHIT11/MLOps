@@ -29,10 +29,28 @@ Refer to [this page](https://airflow.apache.org/docs/apache-airflow/stable/core-
 - Basic knowledge of Python and Airflow concepts.
 
 ## Explanation of the DAG
-- default_args: Contains default arguments for the DAG. Here, it specifies the owner and start date.
-- dag: Defines the DAG with an ID, default arguments, description, and schedule interval.
-- hello_world_task: A BashOperator that prints "Hello, Cloud Composer!".
+- default_args: Contains default arguments for the DAG. Here, it specifies the owner, start date, and retry settings.
+- dag: Defines the DAG with an ID, default arguments, description, and schedule.
+- hello_world_task: A BashOperator that prints "Hello, Cloud Composer!" along with the run date.
 - say_hello_task: A PythonOperator that runs a simple Python function.
+- generate_numbers_task: A PythonOperator that makes 10 random numbers and pushes them to XCom.
+- compute_stats_task: A PythonOperator that pulls the numbers from XCom and computes count, min, max, and mean.
+- goodbye_task: A BashOperator that reads the mean from XCom using a Jinja template and prints it.
+
+## My Changes
+
+- Switched to the current Airflow 2 imports (`airflow.operators.python` / `airflow.operators.bash`) instead of the deprecated `python_operator` / `bash_operator` modules.
+- Replaced the deprecated `schedule_interval` with `schedule`, added `catchup=False` and tags, and defined the DAG with a `with DAG(...)` block.
+- Added `retries` and `retry_delay` to `default_args`.
+- Used a Jinja template (`{{ ds }}`) in the `hello_world` task to print the run date.
+- Added three tasks that pass data between each other with XCom: `generate_numbers` → `compute_stats` → `goodbye`.
+- Changed the task graph so `say_hello` and `generate_numbers` run in parallel after `hello_world`, and both must finish before `goodbye`.
+- Tested the DAG locally with `airflow dags test` (Airflow 2.9.1); all tasks succeeded.
+
+```
+hello_world ──┬──> say_hello ──────────────────────────────┬──> goodbye
+              └──> generate_numbers ──> compute_stats ─────┘
+```
 
 ## Setting Up the Environment
 
