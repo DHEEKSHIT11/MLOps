@@ -249,7 +249,7 @@
         </div>
 
         <div id="resultArea" class="glass-card result-container">
-            <div class="prediction-badge">CONFIDENCE: HIGH</div>
+            <div class="prediction-badge" id="confidenceBadge">CONFIDENCE: --</div>
             <h2 id="predictedClass" style="margin: 10px 0; color: #fff; font-family: 'Orbitron', sans-serif;"></h2>
             
             <div class="flower-card">
@@ -292,6 +292,7 @@
                     
                     // Update Text
                     $('#predictedClass').text(data.predicted_class.toUpperCase());
+                    $('#confidenceBadge').text('CONFIDENCE: ' + (data.confidence * 100).toFixed(1) + '%');
                     
                     // Update Image
                     var imageUrl = '';
@@ -316,8 +317,10 @@
                     $spinner.hide();
                     $btn.css('opacity', '1');
 
-                }).fail(function(data) {
-                    alert('SYSTEM ERROR: Neural Link Disconnected.');
+                }).fail(function(xhr) {
+                    // Show the server's validation message when there is one
+                    var msg = (xhr.responseJSON && xhr.responseJSON.error) || 'Neural Link Disconnected.';
+                    alert('SYSTEM ERROR: ' + msg);
                     $text.show();
                     $spinner.hide();
                     $btn.css('opacity', '1');

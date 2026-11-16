@@ -1,0 +1,24 @@
+## image sizes: original vs fixed
+REPOSITORY:TAG                       SIZE
+iris-app:v2                          1.84GB
+lab2-original:latest                 4.15GB
+
+## BEFORE: original lab image (lab2-original)
+- app listens on 4000, but dockerfile EXPOSEs 80 and compose maps 80:80:
+FAILED: nothing listening on container port 80
+
+## original image: 6 known iris samples
+expected Setosa     got: {"predicted_class":"Virginica"}
+expected Setosa     got: {"predicted_class":"Virginica"}
+expected Versicolor got: {"predicted_class":"Virginica"}
+expected Versicolor got: {"predicted_class":"Virginica"}
+expected Virginica  got: {"predicted_class":"Virginica"}
+expected Virginica  got: {"predicted_class":"Virginica"}
+
+## AFTER: fixed image (iris-app:v2)
+expected Setosa     got: {"confidence":0.9943,"predicted_class":"Setosa",
+expected Setosa     got: {"confidence":0.9946,"predicted_class":"Setosa",
+expected Versicolor got: {"confidence":0.6558,"predicted_class":"Versicolor",
+expected Versicolor got: {"confidence":0.5953,"predicted_class":"Versicolor",
+expected Virginica  got: {"confidence":0.9596,"predicted_class":"Virginica",
+expected Virginica  got: {"confidence":0.9789,"predicted_class":"Virginica",

@@ -1,0 +1,16 @@
+Testing http://localhost:8080
+PASS  GET /
+PASS  GET /health
+PASS  GET /predict
+PASS  predict 5.1,3.5,1.4,0.2 -> Setosa  {"confidence":0.9943,"predicted_class":"Setosa","probabilities":{"Setosa":0.9943,"Versicolor":0.0047,"Virginica":0.001}}
+PASS  predict 5.0,3.4,1.5,0.2 -> Setosa  {"confidence":0.9946,"predicted_class":"Setosa","probabilities":{"Setosa":0.9946,"Versicolor":0.0045,"Virginica":0.0009}}
+PASS  predict 5.9,3.0,4.2,1.5 -> Versicolor  {"confidence":0.6558,"predicted_class":"Versicolor","probabilities":{"Setosa":0.0225,"Versicolor":0.6558,"Virginica":0.3217}}
+PASS  predict 6.4,3.2,4.5,1.5 -> Versicolor  {"confidence":0.5953,"predicted_class":"Versicolor","probabilities":{"Setosa":0.0305,"Versicolor":0.5953,"Virginica":0.3742}}
+PASS  predict 6.7,3.0,5.2,2.3 -> Virginica  {"confidence":0.9596,"predicted_class":"Virginica","probabilities":{"Setosa":0.0,"Versicolor":0.0404,"Virginica":0.9596}}
+PASS  predict 6.3,3.3,6.0,2.5 -> Virginica  {"confidence":0.9789,"predicted_class":"Virginica","probabilities":{"Setosa":0.0,"Versicolor":0.0211,"Virginica":0.9789}}
+PASS  JSON body -> Setosa
+PASS  missing fields -> 400
+PASS  non-number -> error message
+PASS  negative value -> error message
+----
+13 passed, 0 failed

@@ -1,30 +1,52 @@
 # Stage 1: Build and Train the Model
-FROM python:3.10 AS model_training
+FROM python:3.10-slim AS model_training
+
+ENV PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app
 
-COPY src/model_training.py /app/
-COPY requirements.txt /app/
-
+# Install dependencies before copying code, so editing the code does not
+# re-download TensorFlow on every build (Docker reuses the cached layer)
+COPY requirements.txt requirements-serving.txt /app/
 RUN pip install -r requirements.txt
+
+COPY src/model_training.py /app/
 RUN python model_training.py
 
 
 # Stage 2: Serve Predictions
-FROM python:3.10 AS serving
+FROM python:3.10-slim AS serving
+
+ENV PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONUNBUFFERED=1 \
+    TF_CPP_MIN_LOG_LEVEL=2 \
+    PORT=80
 
 WORKDIR /app
 
-COPY --from=model_training /app/my_model.keras /app/
+# Serving only needs TensorFlow + Flask, not scikit-learn
+COPY requirements-serving.txt /app/
+RUN pip install -r requirements-serving.txt
+
+# Run as a non-root user instead of root
+RUN useradd --create-home --uid 1000 appuser
+
+COPY --from=model_training /app/my_model.keras /app/metrics.json /app/
 COPY src/main.py /app/
-COPY requirements.txt /app/
-
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
-
 COPY src/templates /app/templates
 COPY src/statics /app/statics
+
+USER appuser
 
 EXPOSE 80
 # Docker "exposes" port 80 because it is the standard, well-known port for the HTTP (web) protocol
 
-CMD ["python", "main.py"]
+# Docker marks the container "unhealthy" if /health stops answering
+# (python is used because the slim image has no curl)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD python -c "import os, urllib.request; urllib.request.urlopen(f'http://localhost:{os.environ[\"PORT\"]}/health', timeout=4)"
+
+# gunicorn is a production WSGI server (Flask's built-in server is for development only)
+CMD exec gunicorn --bind 0.0.0.0:${PORT} --workers 1 --threads 4 --access-logfile - main:app

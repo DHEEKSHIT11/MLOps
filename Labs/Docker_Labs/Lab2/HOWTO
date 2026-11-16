@@ -1,2 +1,11 @@
-docker build -t app .
-docker run app
+# Option A: multi-stage dockerfile
+docker build -t iris-app .
+docker run -d --name iris -p 8080:80 iris-app
+# open http://localhost:8080/predict
+
+# Option B: docker compose (trainer + server sharing a volume)
+docker compose up -d          # HOST_PORT=8080 docker compose up -d  if port 80 is taken
+docker compose down -v
+
+# Check it works
+./tests/smoke_test.sh http://localhost:8080

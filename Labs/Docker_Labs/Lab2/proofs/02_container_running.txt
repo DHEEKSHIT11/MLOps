@@ -1,0 +1,22 @@
+## docker ps
+NAMES     IMAGE         STATUS                   PORTS
+iris      iris-app:v2   Up 2 minutes (healthy)   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+
+## health status (Docker HEALTHCHECK)
+healthy
+
+## GET /health
+{"metrics":{"epochs_trained":200,"test_accuracy":0.9333,"test_loss":0.1883,"test_samples":30,"train_samples":120,"trained_at":"2026-11-15T23:02:29+00:00"},"model":"my_model.keras","status":"ok"}
+
+## user inside container (should not be root)
+uid=1000(appuser) gid=1000(appuser) groups=1000(appuser)
+
+## server logs
+172.17.0.1 - - [15/Nov/2026:23:11:21 +0000] "POST /predict HTTP/1.1" 400 55 "-" "curl/8.7.1"
+127.0.0.1 - - [15/Nov/2026:23:11:25 +0000] "GET /health HTTP/1.1" 200 195 "-" "Python-urllib/3.10"
+127.0.0.1 - - [15/Nov/2026:23:11:55 +0000] "GET /health HTTP/1.1" 200 195 "-" "Python-urllib/3.10"
+127.0.0.1 - - [15/Nov/2026:23:12:25 +0000] "GET /health HTTP/1.1" 200 195 "-" "Python-urllib/3.10"
+127.0.0.1 - - [15/Nov/2026:23:12:55 +0000] "GET /health HTTP/1.1" 200 195 "-" "Python-urllib/3.10"
+127.0.0.1 - - [15/Nov/2026:23:13:25 +0000] "GET /health HTTP/1.1" 200 195 "-" "Python-urllib/3.10"
+127.0.0.1 - - [15/Nov/2026:23:13:55 +0000] "GET /health HTTP/1.1" 200 195 "-" "Python-urllib/3.10"
+172.17.0.1 - - [15/Nov/2026:23:14:18 +0000] "GET /health HTTP/1.1" 200 195 "-" "curl/8.7.1"

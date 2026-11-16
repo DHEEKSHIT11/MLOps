@@ -1,0 +1,13 @@
+# Keep the build context small: only src/ and the requirements files are needed
+proofs/
+tests/
+*.md
+HOWTO
+docker-compose.yml
+**/__pycache__
+*.pyc
+*.keras
+metrics.json
+.venv/
+venv/
+.DS_Store

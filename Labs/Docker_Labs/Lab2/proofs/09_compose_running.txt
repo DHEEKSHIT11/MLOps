@@ -1,0 +1,20 @@
+## docker compose ps -a
+NAME         SERVICE          STATUS                     PORTS
+ml_serving   serving          Up 7 minutes (healthy)     0.0.0.0:80->80/tcp, [::]:80->80/tcp
+ml_trainer   model-training   Exited (0) 7 minutes ago   
+
+## trainer logs (tail)
+Epoch 200/200
+Test accuracy: 0.9333  (loss 0.1883)
+Model was trained and saved
+
+## shared volume contents (written by trainer, read by server)
+total 44
+drwxr-xr-x 2 root root  4096 Nov 15 23:33 .
+drwxr-xr-x 1 root root  4096 Nov 15 23:41 ..
+-rw-r--r-- 1 root root   168 Nov 15 23:33 metrics.json
+-rw-r--r-- 1 root root 32001 Nov 15 23:33 my_model.keras
+
+## GET /health (server reports the model from the shared volume)
+{"metrics":{"epochs_trained":200,"test_accuracy":0.9333,"test_loss":0.1883,"test_samples":30,"train_samples":120,"trained_at":"2026-11-15T23:33:44+00:00"},"model":"/exchange/my_model.keras","status":"ok"}
+
